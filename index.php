@@ -127,14 +127,19 @@ if (isset($_POST['submit'])) {
                     $no = 1;
                     while ($row = mysqli_fetch_assoc($result)) {
 
+                        // Kunci enkripsi
+                        $method = 'aes-256-cbc';
+                        $password = 'Kampus_STTI';
+
                         // IV must be exact 16 chars (128 bit)
                         $iv = chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0);
+
                         // Mendekripsi data yang terenkripsi dari database
-                        $decrypted_nama = openssl_decrypt(base64_decode($row['nama']), 'aes-256-cbc', 'Kampus_STTI', OPENSSL_RAW_DATA, $iv);
-                        $decrypted_kelas = openssl_decrypt(base64_decode($row['kelas']), 'aes-256-cbc', 'Kampus_STTI', OPENSSL_RAW_DATA, $iv);
-                        $decrypted_email = openssl_decrypt(base64_decode($row['email']), 'aes-256-cbc', 'Kampus_STTI', OPENSSL_RAW_DATA, $iv);
-                        $decrypted_noHP = openssl_decrypt(base64_decode($row['hp']), 'aes-256-cbc', 'Kampus_STTI', OPENSSL_RAW_DATA, $iv);
-                        $decrypted_alamat = openssl_decrypt(base64_decode($row['alamat']), 'aes-256-cbc', 'Kampus_STTI', OPENSSL_RAW_DATA, $iv);
+                        $decrypted_nama = openssl_decrypt(base64_decode($row['nama']), $method, $password, OPENSSL_RAW_DATA, $iv);
+                        $decrypted_kelas = openssl_decrypt(base64_decode($row['kelas']), $method, $password, OPENSSL_RAW_DATA, $iv);
+                        $decrypted_email = openssl_decrypt(base64_decode($row['email']), $method, $password, OPENSSL_RAW_DATA, $iv);
+                        $decrypted_noHP = openssl_decrypt(base64_decode($row['hp']), $method, $password, OPENSSL_RAW_DATA, $iv);
+                        $decrypted_alamat = openssl_decrypt(base64_decode($row['alamat']), $method, $password, OPENSSL_RAW_DATA, $iv);
 
                 ?>
                         <tbody>
