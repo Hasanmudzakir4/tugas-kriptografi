@@ -24,10 +24,16 @@ if (isset($_POST['submit'])) {
     $method = 'aes-256-cbc';
     $password = 'Kampus_STTI';
 
-    // IV must be exact 16 chars (128 bit)
-    $iv = chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0);
+    $iv = chr(0x0) . chr(0x0) .
+        chr(0x0) . chr(0x0) .
+        chr(0x0) . chr(0x0) .
+        chr(0x0) . chr(0x0) .
+        chr(0x0) . chr(0x0) .
+        chr(0x0) . chr(0x0) .
+        chr(0x0) . chr(0x0) .
+        chr(0x0) . chr(0x0);
 
-    // Melakukan enkripsi data    
+    //   Melakukan enkripsi data dengan AES-256-CBC
     $encrypted_nama = base64_encode(openssl_encrypt($nama, $method, $password, OPENSSL_RAW_DATA, $iv));
     $encrypted_kelas = base64_encode(openssl_encrypt($kelas, $method, $password, OPENSSL_RAW_DATA, $iv));
     $encrypted_email = base64_encode(openssl_encrypt($email, $method, $password, OPENSSL_RAW_DATA, $iv));
@@ -36,8 +42,8 @@ if (isset($_POST['submit'])) {
 
     // Menyusun query untuk menyimpan data ke database
     $query = "INSERT INTO mahasiswa 
-                VALUES 
-                ('', '$encrypted_nama', '$encrypted_kelas', '$encrypted_email', '$encrypted_noHP', '$encrypted_alamat') ";
+                   VALUES 
+                   ('', '$encrypted_nama', '$encrypted_kelas', '$encrypted_email', '$encrypted_noHP', '$encrypted_alamat') ";
 
     // Menjalankan query
     mysqli_query($conn, $query);
@@ -100,12 +106,6 @@ if (isset($_POST['submit'])) {
             </form>
         </div>
     </div>
-
-    <?php
-    // ambil data di database
-    $query = "SELECT * FROM mahasiswa";
-    $result = mysqli_query($conn, $query);
-    ?>
     <div class="container col-md-8 float-end mt-3">
         <div class="alert alert-primary text-center">
             <h2>Data Mahasiswa</h2>
@@ -123,6 +123,11 @@ if (isset($_POST['submit'])) {
                     </tr>
                 </thead>
                 <?php
+
+                // ambil data di database
+                $query = "SELECT * FROM mahasiswa";
+                $result = mysqli_query($conn, $query);
+
                 if (mysqli_num_rows($result) > 0) {
                     $no = 1;
                     while ($row = mysqli_fetch_assoc($result)) {
@@ -131,8 +136,14 @@ if (isset($_POST['submit'])) {
                         $method = 'aes-256-cbc';
                         $password = 'Kampus_STTI';
 
-                        // IV must be exact 16 chars (128 bit)
-                        $iv = chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0) . chr(0x0);
+                        $iv = chr(0x0) . chr(0x0) .
+                            chr(0x0) . chr(0x0) .
+                            chr(0x0) . chr(0x0) .
+                            chr(0x0) . chr(0x0) .
+                            chr(0x0) . chr(0x0) .
+                            chr(0x0) . chr(0x0) .
+                            chr(0x0) . chr(0x0) .
+                            chr(0x0) . chr(0x0);
 
                         // Mendekripsi data yang terenkripsi dari database
                         $decrypted_nama = openssl_decrypt(base64_decode($row['nama']), $method, $password, OPENSSL_RAW_DATA, $iv);
